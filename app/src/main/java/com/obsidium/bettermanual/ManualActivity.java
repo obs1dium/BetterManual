@@ -17,7 +17,6 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import com.github.ma1co.pmcademo.app.BaseActivity;
-import com.github.ma1co.pmcademo.app.R;
 import com.sony.scalar.hardware.CameraEx;
 import com.sony.scalar.sysutil.ScalarInput;
 import com.sony.scalar.sysutil.didep.Settings;

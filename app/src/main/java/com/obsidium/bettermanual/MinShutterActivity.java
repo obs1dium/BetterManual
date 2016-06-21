@@ -8,7 +8,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.ma1co.pmcademo.app.BaseActivity;
-import com.github.ma1co.pmcademo.app.R;
 import com.sony.scalar.hardware.CameraEx;
 
 public class MinShutterActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener
