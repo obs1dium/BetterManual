@@ -5,7 +5,7 @@ This app is intended to ease shooting in manual and aperture priority mode with 
 
 ## Installation ##
 
-Use [Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE).
+Use [Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE) or install through [sony-pmca.appspot.com](https://sony-pmca.appspot.com/apps).
 
 ## Usage and features ##
 
