@@ -28,7 +28,7 @@ Press the up button to cycle through display modes. This will toggle the histogr
 
 ### Focus magnification ###
 
-Use the zoom lever to activate focus magnification and zoom in or out. Half-pressing the shutter button ends focus magnification. You can change the position of the preview rectangle by either using the control wheel or swiping the touch screen.
+Use the zoom lever to activate focus magnification and zoom in or out. Half-pressing the shutter button ends focus magnification. You can change the position of the preview rectangle by either using the control wheel or swiping the touch screen. The enter button centers the preview rectangle.
 
 ### Other features ###
 
