@@ -126,7 +126,7 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
     private int             m_curPreviewMagnificationMaxPos;
     private PreviewNavView  m_previewNavView;
 
-    enum DialMode { shutter, aperture, iso, exposure,
+    enum DialMode { shutter, aperture, iso, exposure, mode,
         timelapseSetInterval, timelapseSetPicCount,
         bracketSetStep, bracketSetPicCount
     }
@@ -224,6 +224,13 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
         setDialMode(DialMode.shutter);
 
         m_prefs = new Preferences(this);
+
+        // Hide timelapse and bracketing icons for non-touchscreen devices
+        if (getDeviceInfo().getModel().compareTo("ILCE-5100") != 0)
+        {
+            m_ivBracket.setVisibility(View.GONE);
+            m_ivTimelapse.setVisibility(View.GONE);
+        }
     }
 
     private class SurfaceSwipeTouchListener extends OnSwipeTouchListener
@@ -1561,6 +1568,10 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
         m_tvAperture.setTextColor(newMode == DialMode.aperture ? Color.GREEN : Color.WHITE);
         m_tvISO.setTextColor(newMode == DialMode.iso ? Color.GREEN : Color.WHITE);
         m_tvExposureCompensation.setTextColor(newMode == DialMode.exposure ? Color.GREEN : Color.WHITE);
+        if (newMode == DialMode.mode)
+            m_ivMode.setColorFilter(Color.argb(255, 0, 255, 0));
+        else
+            m_ivMode.setColorFilter(null);
     }
 
     private void movePreviewVertical(int delta)
@@ -1660,6 +1671,11 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
             startBracketCountdown();
             return true;
         }
+        else if (m_dialMode == DialMode.mode)
+        {
+            toggleSceneMode();
+            return true;
+        }
         return false;
     }
 
@@ -1704,6 +1720,9 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
                     setDialMode(DialMode.exposure);
                     break;
                 case exposure:
+                    setDialMode(DialMode.mode);
+                    break;
+                case mode:
                     setDialMode(DialMode.shutter);
                     break;
             }
