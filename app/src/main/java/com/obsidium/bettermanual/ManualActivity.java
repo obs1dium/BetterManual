@@ -126,7 +126,8 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
     private int             m_curPreviewMagnificationMaxPos;
     private PreviewNavView  m_previewNavView;
 
-    enum DialMode { shutter, aperture, iso, exposure, mode,
+    enum DialMode { shutter, aperture, iso, exposure, mode, drive,
+        timelapse, bracket,
         timelapseSetInterval, timelapseSetPicCount,
         bracketSetStep, bracketSetPicCount
     }
@@ -147,6 +148,8 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
 
     private boolean         m_takingPicture;
     private boolean         m_shutterKeyDown;
+
+    private boolean         m_haveTouchscreen;
 
     private static final int VIEW_FLAG_GRID         = 0x01;
     private static final int VIEW_FLAG_HISTOGRAM    = 0x02;
@@ -225,12 +228,7 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
 
         m_prefs = new Preferences(this);
 
-        // Hide timelapse and bracketing icons for non-touchscreen devices
-        if (getDeviceInfo().getModel().compareTo("ILCE-5100") != 0)
-        {
-            m_ivBracket.setVisibility(View.GONE);
-            m_ivTimelapse.setVisibility(View.GONE);
-        }
+        m_haveTouchscreen = getDeviceInfo().getModel().compareTo("ILCE-5100") == 0;
     }
 
     private class SurfaceSwipeTouchListener extends OnSwipeTouchListener
@@ -615,12 +613,14 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
         {
             case manual:
                 newMode = CameraEx.ParametersModifier.SCENE_MODE_APERTURE_PRIORITY;
-                setDialMode(m_haveApertureControl ? DialMode.aperture : DialMode.iso);
+                if (m_dialMode != DialMode.mode)
+                    setDialMode(m_haveApertureControl ? DialMode.aperture : DialMode.iso);
                 setMinShutterSpeed(m_prefs.getMinShutterSpeed());
                 break;
             default:
                 newMode = CameraEx.ParametersModifier.SCENE_MODE_MANUAL_EXPOSURE;
-                setDialMode(DialMode.shutter);
+                if (m_dialMode != DialMode.mode)
+                    setDialMode(DialMode.shutter);
                 setMinShutterSpeed(-1);
                 break;
         }
@@ -1443,15 +1443,13 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
             }
         });
         m_tvHint.setText("\uE04C to abort");
-        // Stop preview
+        // Stop preview (doesn't seem to preserve battery life?)
         m_camera.getNormalCamera().stopPreview();
 
         // Hide some bottom views
         m_prefs.setViewFlags(m_viewFlags);
         m_viewFlags = 0;
         updateViewVisibility();
-
-        // TODO: disable cam auto shutdown
 
         // Start countdown
         m_countdown = COUNTDOWN_SECONDS;
@@ -1569,9 +1567,21 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
         m_tvISO.setTextColor(newMode == DialMode.iso ? Color.GREEN : Color.WHITE);
         m_tvExposureCompensation.setTextColor(newMode == DialMode.exposure ? Color.GREEN : Color.WHITE);
         if (newMode == DialMode.mode)
-            m_ivMode.setColorFilter(Color.argb(255, 0, 255, 0));
+            m_ivMode.setColorFilter(Color.GREEN);
         else
             m_ivMode.setColorFilter(null);
+        if (newMode == DialMode.drive)
+            m_ivDriveMode.setColorFilter(Color.GREEN);
+        else
+            m_ivDriveMode.setColorFilter(null);
+        if (newMode == DialMode.timelapse)
+            m_ivTimelapse.setColorFilter(Color.GREEN);
+        else
+            m_ivTimelapse.setColorFilter(null);
+        if (newMode == DialMode.bracket)
+            m_ivBracket.setColorFilter(Color.GREEN);
+        else
+            m_ivBracket.setColorFilter(null);
     }
 
     private void movePreviewVertical(int delta)
@@ -1594,6 +1604,12 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
             newX = -m_curPreviewMagnificationMaxPos;
         m_curPreviewMagnificationPos = new Pair<Integer, Integer>(newX, m_curPreviewMagnificationPos.second);
         m_camera.setPreviewMagnification(m_curPreviewMagnification, m_curPreviewMagnificationPos);
+    }
+
+    @Override
+    protected boolean onEnterKeyUp()
+    {
+        return true;
     }
 
     @Override
@@ -1676,7 +1692,28 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
             toggleSceneMode();
             return true;
         }
+        else if (m_dialMode == DialMode.drive)
+        {
+            toggleDriveMode();
+            return true;
+        }
+        else if (m_dialMode == DialMode.timelapse)
+        {
+            prepareTimelapse();
+            return true;
+        }
+        else if (m_dialMode == DialMode.bracket)
+        {
+            prepareBracketing();
+            return true;
+        }
         return false;
+    }
+
+    @Override
+    protected boolean onUpKeyDown()
+    {
+        return true;
     }
 
     @Override
@@ -1693,6 +1730,12 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
             cycleVisibleViews();
             return true;
         }
+    }
+
+    @Override
+    protected boolean onDownKeyDown()
+    {
+        return true;
     }
 
     @Override
@@ -1720,14 +1763,29 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
                     setDialMode(DialMode.exposure);
                     break;
                 case exposure:
-                    setDialMode(DialMode.mode);
+                    setDialMode(m_haveTouchscreen ? DialMode.shutter : DialMode.mode);
                     break;
                 case mode:
+                    setDialMode(DialMode.drive);
+                    break;
+                case drive:
+                    setDialMode(DialMode.timelapse);
+                    break;
+                case timelapse:
+                    setDialMode(DialMode.bracket);
+                    break;
+                case bracket:
                     setDialMode(DialMode.shutter);
                     break;
             }
             return true;
         }
+    }
+
+    @Override
+    protected boolean onLeftKeyDown()
+    {
+        return true;
     }
 
     @Override
@@ -1739,6 +1797,12 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected boolean onRightKeyDown()
+    {
+        return true;
     }
 
     @Override
