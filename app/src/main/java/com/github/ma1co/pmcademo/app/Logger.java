@@ -6,7 +6,7 @@ import java.io.*;
 
 public class Logger {
     public static File getFile() {
-        return new File(Environment.getExternalStorageDirectory(), "PMCADEMO/LOG.TXT");
+        return new File(Environment.getExternalStorageDirectory(), "BMANUAL/LOG.TXT");
     }
 
     protected static void log(String msg) {

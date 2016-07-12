@@ -164,6 +164,9 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
 
         setContentView(R.layout.activity_manual);
 
+        if (!(Thread.getDefaultUncaughtExceptionHandler() instanceof CustomExceptionHandler))
+            Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler());
+
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         surfaceView.setOnTouchListener(new SurfaceSwipeTouchListener(this));
         m_surfaceHolder = surfaceView.getHolder();
