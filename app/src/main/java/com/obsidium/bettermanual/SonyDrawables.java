@@ -17,4 +17,7 @@ public class SonyDrawables
     public static final int p_16_dd_parts_contshot = 0x01080fe9;
 
     public static final int p_16_dd_parts_43_shoot_icon_setting_drivemode_invalid = 0x01080bc6;
+
+    public static final int p_16_dd_parts_rec_focuscontrol_near = 0x01080ddd;
+    public static final int p_16_dd_parts_rec_focuscontrol_far = 0x010807f9;
 }

@@ -134,6 +134,41 @@
         android:layout_above="@+id/lInfoBottom"
         android:layout_marginRight="2dp"/>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/lFocusScale"
+        android:layout_above="@+id/lInfoBottom">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:id="@+id/ivFocusLeft"/>
+
+        <com.obsidium.bettermanual.FocusScaleView
+            android:layout_width="156dp"
+            android:layout_height="20dp"
+            android:id="@+id/vFocusScale"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            tools:background="#32722f"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivFocusRight"
+            android:layout_marginLeft="4dp"
+            />
+
+    </LinearLayout>
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

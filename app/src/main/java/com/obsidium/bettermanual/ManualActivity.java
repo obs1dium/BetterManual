@@ -53,6 +53,8 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
     private ImageView       m_ivBracket;
     private GridView        m_vGrid;
     private TextView        m_tvHint;
+    private FocusScaleView  m_focusScaleView;
+    private View            m_lFocusScale;
 
     // Bracketing
     private int             m_bracketStep;  // in 1/3 stops
@@ -97,6 +99,15 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
                 else if (m_bracketActive)
                     startShootingBracket();
             }
+        }
+    };
+
+    private final Runnable m_hideFocusScaleRunnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            m_lFocusScale.setVisibility(View.GONE);
         }
     };
 
@@ -226,6 +237,15 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
 
         m_tvHint = (TextView)findViewById(R.id.tvHint);
         m_tvHint.setVisibility(View.GONE);
+
+        m_focusScaleView = (FocusScaleView)findViewById(R.id.vFocusScale);
+        m_lFocusScale = findViewById(R.id.lFocusScale);
+        m_lFocusScale.setVisibility(View.GONE);
+
+        //noinspection ResourceType
+        ((ImageView)findViewById(R.id.ivFocusRight)).setImageResource(SonyDrawables.p_16_dd_parts_rec_focuscontrol_far);
+        //noinspection ResourceType
+        ((ImageView)findViewById(R.id.ivFocusLeft)).setImageResource(SonyDrawables.p_16_dd_parts_rec_focuscontrol_near);
 
         setDialMode(DialMode.shutter);
 
@@ -756,6 +776,8 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
     {
         final Camera.Parameters params = m_camera.createEmptyParameters();
         final CameraEx.ParametersModifier modifier = m_camera.createParametersModifier(params);
+        // Focus mode
+        params.setFocusMode(CameraEx.ParametersModifier.FOCUS_MODE_MANUAL);
         // Scene mode
         final String sceneMode = m_prefs.getSceneMode();
         params.setSceneMode(sceneMode);
@@ -1022,6 +1044,22 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
                 log("onInfoUpdated b:" + String.valueOf(b) +
                                " x:" + coords.first + " y:" + coords.second + "\n");
                 */
+            }
+        });
+
+        m_camera.setFocusDriveListener(new CameraEx.FocusDriveListener()
+        {
+            @Override
+            public void onChanged(CameraEx.FocusPosition focusPosition, CameraEx cameraEx)
+            {
+                if (m_curPreviewMagnification == 0)
+                {
+                    m_lFocusScale.setVisibility(View.VISIBLE);
+                    m_focusScaleView.setMaxPosition(focusPosition.maxPosition);
+                    m_focusScaleView.setCurPosition(focusPosition.currentPosition);
+                    m_handler.removeCallbacks(m_hideFocusScaleRunnable);
+                    m_handler.postDelayed(m_hideFocusScaleRunnable, 2000);
+                }
             }
         });
 
@@ -1856,11 +1894,14 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
                 // zoom lever tele
                 m_zoomLeverPressed = true;
                 if (m_curPreviewMagnification == 0)
+                {
                     m_curPreviewMagnification = 100;
+                    m_lFocusScale.setVisibility(View.GONE);
+                }
                 else
                     m_curPreviewMagnification = 200;
                 m_camera.setPreviewMagnification(m_curPreviewMagnification, m_curPreviewMagnificationPos);
-                return false;
+                return true;
             }
             else if (scanCode == 611 && !m_zoomLeverPressed)
             {
