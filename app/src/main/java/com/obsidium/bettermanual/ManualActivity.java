@@ -1436,7 +1436,14 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
             m_tvHint.setText("\uE4CD to set timelapse interval, \uE04C to confirm");
             m_tvHint.setVisibility(View.VISIBLE);
 
-            m_autoPowerOffTimeBackup = Settings.getAutoPowerOffTime();
+            // Not supported on some camera models
+            try
+            {
+                m_autoPowerOffTimeBackup = Settings.getAutoPowerOffTime();
+            }
+            catch (NoSuchMethodError e)
+            {
+            }
         }
     }
 
@@ -1510,7 +1517,13 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
     {
         m_tvHint.setVisibility(View.GONE);
         m_tvMsg.setVisibility(View.GONE);
-        Settings.setAutoPowerOffTime(m_timelapseInterval / 1000 * 2);
+        try
+        {
+            Settings.setAutoPowerOffTime(m_timelapseInterval / 1000 * 2);
+        }
+        catch (NoSuchMethodError e)
+        {
+        }
         m_handler.post(m_timelapseRunnable);
     }
 
@@ -1533,7 +1546,13 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
         m_viewFlags = m_prefs.getViewFlags(m_viewFlags);
         updateViewVisibility();
 
-        Settings.setAutoPowerOffTime(m_autoPowerOffTimeBackup);
+        try
+        {
+            Settings.setAutoPowerOffTime(m_autoPowerOffTimeBackup);
+        }
+        catch (NoSuchMethodError e)
+        {
+        }
     }
 
     @Override
