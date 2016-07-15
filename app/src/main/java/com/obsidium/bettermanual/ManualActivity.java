@@ -1447,9 +1447,9 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
         }
     }
 
-    private void setLeftViewVisibility(boolean visibile)
+    private void setLeftViewVisibility(boolean visible)
     {
-        final int visibility = visibile ? View.VISIBLE : View.GONE;
+        final int visibility = visible ? View.VISIBLE : View.GONE;
         m_ivTimelapse.setVisibility(visibility);
         m_ivDriveMode.setVisibility(visibility);
         m_ivMode.setVisibility(visibility);
