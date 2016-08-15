@@ -14,7 +14,7 @@ Features are accessed using either the touch screen or the control wheel.
 ### Shooting modes ###
 
 Touch the mode indicator on the top left to toggle between manual and aperture priority mode.
-The icon directly below it allows you to cycle between single short, low speed and high speed burst modes.
+The icon directly below it allows you to cycle between single shot, low speed and high speed burst modes.
 
 ### Shooting parameters ###
 
