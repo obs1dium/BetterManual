@@ -34,6 +34,8 @@ Use the zoom lever to activate focus magnification and zoom in or out. Half-pres
 
 The app also includes simple timelapse and exposure bracketing modes. Touch the icon on the left side and follow the on-screen instructions.
 
+Long exposure noise reduction is disabled (normally forced in single shot mode for exposures >= 1" and in bulb mode on the A5100).
+
 Exit the app using the help/trash button.
 
 The app remembers the configured settings across multiple runs.
