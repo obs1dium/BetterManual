@@ -88,7 +88,7 @@ public class CameraUtil
 
     public static String formatShutterSpeed(int n, int d)
     {
-        if (n == 1 && d != 2)
+        if (n == 1 && d != 2 && d != 1)
             return String.format("%d/%d", n, d);
         else if (d == 1)
         {
