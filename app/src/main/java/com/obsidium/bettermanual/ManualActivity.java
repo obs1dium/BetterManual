@@ -772,6 +772,17 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
         // TODO: Dial mode
     }
 
+    private void disableLENR()
+    {
+        // Disable long exposure noise reduction
+        final Camera.Parameters params = m_camera.createEmptyParameters();
+        final CameraEx.ParametersModifier paramsModifier = m_camera.createParametersModifier(m_camera.getNormalCamera().getParameters());
+        final CameraEx.ParametersModifier modifier = m_camera.createParametersModifier(params);
+        if (paramsModifier.isSupportedLongExposureNR())
+            modifier.setLongExposureNR(false);
+        m_camera.getNormalCamera().setParameters(params);
+    }
+
     private void loadDefaults()
     {
         final Camera.Parameters params = m_camera.createEmptyParameters();
@@ -799,6 +810,8 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
         m_viewFlags = m_prefs.getViewFlags(VIEW_FLAG_GRID | VIEW_FLAG_HISTOGRAM);
         // TODO: Dial mode?
         setDialMode(DialMode.shutter);
+
+        disableLENR();
     }
 
     private void setMinShutterSpeed(int speed)

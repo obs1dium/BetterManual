@@ -91,7 +91,12 @@ public class CameraUtil
         if (n == 1 && d != 2)
             return String.format("%d/%d", n, d);
         else if (d == 1)
-            return String.format("%d\"", n);
+        {
+            if (n == 65535)
+                return "BULB";
+            else
+                return String.format("%d\"", n);
+        }
         else
             return String.format("%.1f\"", (float) n / (float) d);
     }

@@ -4,3 +4,4 @@
 /local.properties
 /*.iml
 /keystore.jks
+/app/*.apk
