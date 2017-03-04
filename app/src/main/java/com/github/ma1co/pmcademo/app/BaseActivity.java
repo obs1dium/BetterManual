@@ -12,6 +12,16 @@ import com.sony.scalar.sysutil.didep.Gpelibrary;
 public class BaseActivity extends Activity {
     public static final String NOTIFICATION_DISPLAY_CHANGED = "NOTIFICATION_DISPLAY_CHANGED";
 
+    public static final String KEY_ACCESSORY_APO = "KEY_ACCESSORY_APO";
+    public static final String KEY_DEDICATED_APO = "KEY_DEDICATED_APO";
+    public static final String KEY_LENS_APO = "KEY_LENS_APO";
+    public static final String KEY_MEDIA_INOUT_APO = "KEY_MEDIA_INOUT_APO";
+    public static final String KEY_PLAY_APO = "KEY_PLAY_APO";
+    public static final String KEY_PLAY_PON = "KEY_PLAY_PON";
+    public static final String KEY_POWER_APO = "KEY_POWER_APO";
+    public static final String KEY_POWER_SLIDE_PON = "KEY_POWER_SLIDE_PON";
+    public static final String KEY_RELEASE_APO = "KEY_RELEASE_APO";
+
     private DisplayManager displayManager;
 
     @Override
@@ -211,7 +221,11 @@ public class BaseActivity extends Activity {
         intent.putExtra("class_name", getComponentName().getClassName());
         //intent.putExtra("pkey", new String[] {});// either this or these two:
         //intent.putExtra("pullingback_key", new String[] {});
-        //intent.putExtra("resume_key", new String[] {});
+        // Exit app when plugging camera into USB
+        intent.putExtra("pullingback_key", new String[] { "KEY_USB_CONNECT" });
+        // Automatically resume app after power off etc.
+        intent.putExtra("resume_key", new String[] { KEY_POWER_SLIDE_PON, KEY_RELEASE_APO, KEY_PLAY_APO,
+                KEY_MEDIA_INOUT_APO, KEY_LENS_APO, KEY_ACCESSORY_APO, KEY_DEDICATED_APO, KEY_POWER_APO, KEY_PLAY_PON });
         sendBroadcast(intent);
     }
 

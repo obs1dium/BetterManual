@@ -1913,6 +1913,20 @@ public class ManualActivity extends BaseActivity implements SurfaceHolder.Callba
     }
 
     @Override
+    protected boolean onDeleteKeyUp()
+    {
+        // Exiting, make sure the app isn't restarted
+        Intent intent = new Intent("com.android.server.DAConnectionManagerService.AppInfoReceive");
+        intent.putExtra("package_name", getComponentName().getPackageName());
+        intent.putExtra("class_name", getComponentName().getClassName());
+        intent.putExtra("pullingback_key", new String[] {});
+        intent.putExtra("resume_key", new String[] {});
+        sendBroadcast(intent);
+        onBackPressed();
+        return true;
+    }
+
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event)
     {
         final int scanCode = event.getScanCode();

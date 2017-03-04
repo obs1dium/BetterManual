@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 10
-    buildToolsVersion "20.0.0"
+    buildToolsVersion '25.0.2'
 
     defaultConfig {
         applicationId "com.obsidium.bettermanual"
         minSdkVersion 10
         targetSdkVersion 10
-        versionCode 6
-        versionName "1.4.1"
+        versionCode 7
+        versionName "1.5"
     }
     buildTypes {
         release {
