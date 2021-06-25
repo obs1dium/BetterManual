@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 10
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '30.0.2'
 
     defaultConfig {
         applicationId "com.obsidium.bettermanual"
@@ -10,6 +10,7 @@ android {
         targetSdkVersion 10
         versionCode 7
         versionName "1.5"
+        archivesBaseName = "BetterManual-${versionName}"
     }
     buildTypes {
         release {
@@ -25,18 +26,11 @@ android {
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven { url "https://jitpack.io" }
 }
 
-android.applicationVariants.all { variant ->
-    variant.outputs.each { output ->
-        def apkName = "BetterManual-${output.baseName}-${variant.versionName}.apk"
-        output.outputFile = new File(output.outputFile.parent, apkName)
-    }
-}
-
 dependencies {
-    provided 'com.github.ma1co.OpenMemories-Framework:stubs:-SNAPSHOT'
-    compile 'com.github.ma1co.OpenMemories-Framework:framework:-SNAPSHOT'
+    compileOnly 'com.github.ma1co.OpenMemories-Framework:stubs:-SNAPSHOT'
+    implementation 'com.github.ma1co.OpenMemories-Framework:framework:-SNAPSHOT'
 }
