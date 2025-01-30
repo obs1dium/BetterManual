@@ -2,6 +2,7 @@
 
 This app is intended to ease shooting in manual and aperture priority mode with (legacy) prime lenses on the A5100 camera. It uses the [OpenMemories Framework](https://github.com/ma1co/OpenMemories-Framework).
 **While the app may work on other cameras, it was written specifically for use with the A5100.**
+**Do not try to install it on cameras without a dedicated manual mode!**
 
 ## Installation ##
 
